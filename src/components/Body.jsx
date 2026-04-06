@@ -4,12 +4,14 @@ import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../utils/constants'
+import axios from 'axios'
+import { addUser } from '../utils/cartSlice'
 
 export default function Body() {
   const dispatch= useDispatch();
-  const navigate= Navigate();
+  const navigate= useNavigate();
   const fetchUser= async()=>{
     try{
     const res= await axios.get(BASE_URL+ "/profile",{
