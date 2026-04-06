@@ -5,11 +5,11 @@ import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../utils/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+const handleLogout= async () =>{
 
 const dispatch= useDispatch();
 const navigate=useNavigate();
-
-const handleLogout= async () =>{
   try{
     await axios.post(BASE_URL+"/logout",{},{ withCredentials: true });
     dispatch(removeUser());
