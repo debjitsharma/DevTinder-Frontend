@@ -6,10 +6,13 @@ import { useDispatch } from 'react-redux';
 import { removeUser } from '../utils/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const handleLogout= async () =>{
+
+export default function Navbar() {
 
 const dispatch= useDispatch();
 const navigate=useNavigate();
+const user= useSelector((store)=>store.user);
+const handleLogout= async () =>{
   try{
     await axios.post(BASE_URL+"/logout",{},{ withCredentials: true });
     dispatch(removeUser());
@@ -19,9 +22,6 @@ const navigate=useNavigate();
     }
     
   };
-
-export default function Navbar() {
-  const user= useSelector((store)=>store.user);
   return (
     <div><div className="navbar bg-base-100 shadow-sm">
   <div className="flex-1">

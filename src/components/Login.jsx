@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/constants';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:50000";
 
 const Login = () => {
   const [emailId, setEmailId]= useState("");
@@ -13,18 +13,15 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError("");
+  const handleSubmit = async () => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/login`, {
+      const res = await axios.post(BASE_URL+"/login", {
         emailId,
         password,
       },{withCredentials:true})
         dispatch(addUser(res.data));
         navigate("/feed")
     } catch(err) {
-      console.error('Error occurred while signing in:', err)
       setError(err?.response?.data?.message || "Login failed. Please check credentials or backend server.");
     }
   }
