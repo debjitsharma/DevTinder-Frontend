@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import { useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -12,6 +13,7 @@ import { useSelector } from 'react-redux'
 export default function Body() {
   const dispatch= useDispatch();
   const navigate= useNavigate();
+  const location=useLocation();
   const userData= useSelector((store)=>store.user);
   const fetchUser= async()=>{
     if(userData) return;
@@ -26,7 +28,10 @@ export default function Body() {
     }
   }};
   useEffect(()=>{
-    fetchUser();
+  if(location.pathname!=="/login"){
+        fetchUser();
+  }
+
   },[]);
   return (
     <div><Navbar/>
