@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector} from 'react-redux';
 import { addUser } from '../utils/cartSlice';
@@ -22,24 +22,37 @@ const [gender, setGender]=useState(user?.gender || '');
 const [about, setAbout]=useState(user?.about || '');
 const [skills, setSkills]=useState(user?.skills?.join(', ') || '');
 
+// Add this in Profile.jsx after your useState declarations
+useEffect(() => {
+  if (user) {
+    setFirstName(user.firstName || '');
+    setLastName(user.lastName || '');
+    setPhotoUrl(user.photoUrl || '');
+    setAge(user.age || '');
+    setGender(user.gender || '');
+    setAbout(user.about || '');
+    setSkills(user.skills?.join(', ') || '');
+  }
+}, [user]); // runs every time user changes in Redux
+
 
   const handlePhotoUpload= async (e)=>{
     const file = e.target.files[0];
     if(!file) return;
     const formData= new FormData();
-    formData.append('photo',file);
+    formData.append('file',file);
+    formData.append('upload_preset','devtinder');
     setUploading(true);
     setError('');
+    setSuccess('');
+    
 
     try{
-      //sends image to cloudinary Url via backend
-      const uploadRes= await axios.post(BASE_URL+'/upload-photo',formData,{
-        withCredentials:true,
-        headers:{'Content-Type':'multipart/form-data'}
-      } );
-      
+      //upload directly to Cloudinary
+      const uploadRes= await axios.post('https://api.cloudinary.com/v1_1/dpmulahu7/image/upload', formData);
+     
       //gets the Cloudinary url 
-      const newPhotoUrl= uploadRes.data.photoUrl;
+      const newPhotoUrl= uploadRes.data.secure_url;
 
       //save the url to mongodb
       const saveRes=await axios.patch(BASE_URL+'/profile/edit',
