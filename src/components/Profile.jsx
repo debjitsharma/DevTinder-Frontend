@@ -59,14 +59,16 @@ useEffect(() => {
         {photoUrl:newPhotoUrl},
         {withCredentials:true}
       );
-      
+      console.log("saveRes:", saveRes.data);
       //updates redux store
-      dispatch(addUser(saveRes.data.data));
+      if (saveRes.data.data) {
+  dispatch(addUser(saveRes.data.data));
+}
       //updates local state so preview updates
       setPhotoUrl(newPhotoUrl);
       setSuccess("Photo updated Successfully")
     }catch(err){
-      setError(err?.response?.data || 'Photo upload failed. Try again')
+   setError(err?.response?.data?.message || err?.response?.data || 'Photo upload failed. Try again');
     }finally{
       setUploading(false);
     }
@@ -111,7 +113,7 @@ useEffect(() => {
       dispatch(addUser(res.data.data));
       setSuccess('Profile updated successfully!')
     }catch (err) {
-      setError(err?.response?.data || 'Something went wrong. Try again.');
+   setError(err?.response?.data?.message || err?.response?.data || 'Photo upload failed. Try again');
     } finally {
       setSaving(false);
     }

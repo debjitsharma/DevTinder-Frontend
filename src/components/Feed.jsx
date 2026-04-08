@@ -1,8 +1,9 @@
 import React from 'react'
+import Card from './Cards'
 
 const Feed = () => {
   return (
-    <div>Feed</div>
+    <div><Card/></div>
   )
 }
 
