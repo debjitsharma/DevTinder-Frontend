@@ -29,7 +29,7 @@ const Feed = () => {
    if(feed.length===0)
     return <h1>No more users to show</h1>;
   return (
-    <div className='flex justify-center my-10'><UserCard user={feed[0]}/></div>
+    <div className='flex justify-center my-10'><UserCard user={feed[7]}/></div>
   )
 }
 

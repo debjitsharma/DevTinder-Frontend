@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import { BASE_URL } from '../utils/constants';
 import { useDispatch, useSelector} from 'react-redux';
 import { addUser } from '../utils/cartSlice';
+import UserCard from './UserCArd';
 import axios from 'axios';
 export default function Profile() {
 const user=useSelector((store)=>store.user);
@@ -261,5 +262,6 @@ useEffect(() => {
  
         </div>
       </div>
+      <UserCard user={user}/>
     </div>
   );}
