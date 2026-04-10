@@ -19,12 +19,12 @@ const Feed = () => {
         {withCredentials:true});
         dispatch(addFeed(res.data));
     }catch(err){
-      //Handle error
+      console.error("Feed fetch error:", err?.response?.status, err?.message);
     }
 
    }
 
-   useEffect(()=>{getFeed;},[]);
+   useEffect(()=>{getFeed();},[]);
    if(!feed) return null;
    if(feed.length===0)
     return <h1>No more users to show</h1>;
