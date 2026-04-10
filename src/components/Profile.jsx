@@ -121,7 +121,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-base-200">
+    <div className="min-h-screen flex justify-around space-evenly items-center p-8 bg-base-200">
       <div className="bg-base-100 rounded-2xl border border-base-300 w-full max-w-2xl overflow-hidden">
  
         {/* Header with avatar */}
@@ -262,6 +262,7 @@ useEffect(() => {
  
         </div>
       </div>
-      <UserCard user={user}/>
+      <div>
+      {user && <UserCard user={{firstName, lastName, photoUrl, age, gender, about, skills}}/>}</div>
     </div>
   );}
