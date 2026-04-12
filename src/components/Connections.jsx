@@ -19,12 +19,11 @@ const Connections = () => {
   }
  catch(err){
 //handle error
- }
- useEffect(()=>fetchConnections(),[]);
+ } }
+  useEffect(()=>fetchConnections(),[]);
  if(!connections) return null;
  if(connections.length===0)
   return <h1>No Connections Found</h1>;
- }
     return (
     <div className="flex justify-center">{connections.map((connections)=>{
     const {_id, firstName, lastName,photoUrl, age, gender, about}=connections;
