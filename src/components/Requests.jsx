@@ -35,7 +35,7 @@ if(requests.length===0)
 
   return (
     <div className="center my-10">{requests.map((request)=>{
-     const { firstName, lastName,photoUrl, age, gender, about}=requests.fromUserId;
+     const { firstName, lastName,photoUrl, age, gender, about}=request.fromUserId;
      return(<div className="card card-side bg-base-100 shadow-sm">
   <figure>
     <img
