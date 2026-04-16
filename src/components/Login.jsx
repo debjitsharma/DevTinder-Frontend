@@ -11,10 +11,27 @@ const Login = () => {
   const [password,setPassword] = useState("");
  const [firstName,setFirstName] = useState("");
   const [lastName,setLastName] = useState("");
+  const [isLoginForm,setLoginForm]=useState(true);
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const handleSignup =async()=>{
+     try{
+      const res=await axios.post(
+        BASE_URL+"/signup",
+        {
+          firstName,lastName,emailId,password 
+        },{withCredentials:true}
+      );
+
+      dispatch(addUser(res.data.data));
+      navigate("/profile")
+     }
+     catch(err){
+      setError(err?.response?.data || "Something went wrong");
+     }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -28,7 +45,7 @@ const Login = () => {
       setError(err?.response?.data?.message || "Login failed. Please check credentials or backend server.");
     }
   }
-
+}
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
