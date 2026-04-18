@@ -21,7 +21,8 @@ export default function Body() {
     const res= await axios.get(BASE_URL+ "/profile",{
       withCredentials:true});
   
-  dispatch(addUser(res.data))}
+  dispatch(addUser(res.data));
+}
   catch(err){
     if (err.response?.status===401){
       navigate("/login")

@@ -16,7 +16,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleSignup =async()=>{
+  const handleSignup =async(e)=>{
+     e.preventDefault();
      try{
       const res=await axios.post(
         BASE_URL+"/signup",

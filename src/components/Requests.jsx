@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import {BASE_URL} from "../utils/constants"
 import { addRequests, removeRequests } from '../utils/requestSlice'
+import {addConnections} from "../utils/connectionSlice";
 
 
 const Requests = () => {
@@ -24,6 +25,14 @@ const reviewRequest= async(status,_id)=>{
     try{
         await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true});
         dispatch(removeRequests(_id));
+
+        if(status=="accepted")
+        {
+          const acceptedUser= requests.find((req)=>req._id===_id);
+          if(acceptedUser){
+            dispatch(addConnections([...addConnections, acceptedUser.fromUserId]));
+          }
+        }
     }catch(err){
         //handle error
     }
