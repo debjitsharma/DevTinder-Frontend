@@ -10,6 +10,7 @@ import {addConnections} from "../utils/connectionSlice";
 const Requests = () => {
 
 const requests= useSelector((store)=>store.requests);
+const connections=useSelector((store)=>store.connections);
 const dispatch=useDispatch();
 
 const fetchRequests= async()=>{
@@ -30,7 +31,7 @@ const reviewRequest= async(status,_id)=>{
         {
           const acceptedUser= requests.find((req)=>req._id===_id);
           if(acceptedUser){
-            dispatch(addConnections([...addConnections, acceptedUser.fromUserId]));
+            dispatch(addConnections([...(connections || []), acceptedUser.fromUserId]));
           }
         }
     }catch(err){

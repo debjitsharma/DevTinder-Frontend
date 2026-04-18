@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../utils/cartSlice';
+import { removeConnections } from '../utils/connectionSlice';
+import { removeFeed } from '../utils/feedSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -16,6 +18,8 @@ const handleLogout= async () =>{
   try{
     await axios.post(BASE_URL+"/logout",{},{ withCredentials: true });
     dispatch(removeUser());
+    dispatch(removeFeed());
+    dispatch(removeConnections());
     navigate("/login");
     } catch(err){
       console.log(err);
