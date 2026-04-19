@@ -22,17 +22,13 @@ dispatch(addRequests(res.data.data));
     }
     }
 
-const reviewRequest= async(status,_id)=>{
+const reviewRequest= async(status, request)=>{
     try{
-        await axios.post(BASE_URL+"/request/review/"+status+"/"+_id,{},{withCredentials:true});
-        dispatch(removeRequests(_id));
+        await axios.post(BASE_URL+"/request/review/"+status+"/"+request._id,{},{withCredentials:true});
+        dispatch(removeRequests(request._id));
 
-        if(status=="accepted")
-        {
-          const acceptedUser= requests.find((req)=>req._id===_id);
-          if(acceptedUser){
-            dispatch(addConnections([...(connections || []), acceptedUser.fromUserId]));
-          }
+        if(status === "accepted" && request.fromUserId){
+            dispatch(addConnections([...(connections || []), request.fromUserId]));
         }
     }catch(err){
         //handle error
@@ -46,7 +42,7 @@ if(requests.length===0)
   return (
     <div className="center my-10">{requests.map((request)=>{
      const { firstName, lastName,photoUrl, age, gender, about}=request.fromUserId;
-     return(<div className="card card-side bg-base-100 shadow-sm">
+     return(<div key={request._id} className="card card-side bg-base-100 shadow-sm">
   <figure>
     <img
       src={photoUrl}
@@ -56,10 +52,10 @@ if(requests.length===0)
     <h2 className="card-title">{firstName +" " + lastName} . {age} . {gender}</h2>
     <p>{about}</p>
     <div className="card-actions justify-end">
-      <button className="btn btn-primary" onClick={()=>reviewRequest("accepted",request._id)}>Accept</button>
+      <button className="btn btn-primary" onClick={()=>reviewRequest("accepted", request)}>Accept</button>
     </div>
     <div className="card-actions justify-end">
-      <button className="btn btn-primary" onClick={()=>reviewRequest("rejected",request._id)}>Reject</button>
+      <button className="btn btn-primary" onClick={()=>reviewRequest("rejected", request)}>Reject</button>
     </div>
   </div>
 </div>)

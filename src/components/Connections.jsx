@@ -12,6 +12,7 @@ const Connections = () => {
  const dispatch= useDispatch();
 
  const fetchConnections= async()=>{
+   if(connections !== null) return;
   try{
     const res=await axios.get(BASE_URL+"/user/connections",{withCredentials:true});
     dispatch(addConnections(res.data.data));
@@ -28,7 +29,7 @@ const Connections = () => {
     <div className="flex justify-center">{connections.map((connections)=>{
     const {_id, firstName, lastName,photoUrl, age, gender, about}=connections;
     return(
-    <div className="card bg-base-100 w-96 shadow-sm">
+    <div key={_id} className="card bg-base-100 w-96 shadow-sm">
   <figure>
     <img
       src={photoUrl}

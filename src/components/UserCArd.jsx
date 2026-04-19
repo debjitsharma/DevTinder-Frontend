@@ -2,9 +2,17 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { removeUserFromFeed } from "../utils/feedSlice";
+import {motion,usemotionValue,useTransform} from "framer-motion";
+
 const UserCard = ({ user }) => {
   const { _id,firstName, lastName, photoUrl, age, gender, about } = user;
   const dispatch= useDispatch();
+
+  // ── swipe motion values ──
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-20, 20]);
+  const likeOpacity = useTransform(x, [50, 150], [0, 1]);
+  const nopeOpacity = useTransform(x, [-50, -150], [0, 1]);
 
   const handleSendRequest= async(status,userId)=>{
     try{
@@ -13,10 +21,39 @@ const UserCard = ({ user }) => {
     }catch(err){
   //handle erroe
  }
-  }
+  };
+
+    const handleDragEnd = (event, info) => {
+    if (info.offset.x > 100) {
+      handleSendRequest("interested", _id); // ← swiped right = like
+    } else if (info.offset.x < -100) {
+      handleSendRequest("ignored", _id);    // ← swiped left = ignore
+    }
+  };
 
   return (
-    <div className="relative w-100 rounded-3xl overflow-hidden shadow-2xl bg-white select-none">
+     <motion.div
+      style={{ x, rotate }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={handleDragEnd}
+      className="relative w-100 rounded-3xl overflow-hidden shadow-2xl bg-white select-none cursor-grab active:cursor-grabbing"
+    >
+
+      <motion.div
+        style={{ opacity: likeOpacity }}
+        className="absolute top-8 left-6 z-10 border-4 border-green-400 text-green-400 text-3xl font-bold px-4 py-1 rounded-lg -rotate-12"
+      >
+        LIKE
+      </motion.div>
+
+       <motion.div
+        style={{ opacity: nopeOpacity }}
+        className="absolute top-8 right-6 z-10 border-4 border-red-400 text-red-400 text-3xl font-bold px-4 py-1 rounded-lg rotate-12"
+      >
+        NOPE
+      </motion.div>
+
 
       {/* Photo */}
       <div className="relative h-150 bg-gray-200">
@@ -67,7 +104,7 @@ const UserCard = ({ user }) => {
         </button>
 
       </div>
-    </div>
+   </motion.div>
   );
 };
 
