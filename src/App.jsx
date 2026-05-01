@@ -7,7 +7,7 @@ import {store} from "./utils/appStore";
 import { Provider } from "react-redux";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
-import { Chat } from "./components/Chat";
+import {Chat} from './components/Chat'
 
 function App() {
 
