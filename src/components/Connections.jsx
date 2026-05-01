@@ -138,6 +138,7 @@ const Connections = () => {
                     {skills.length > 2 && (
                       <span className="text-xs text-base-content/40">+{skills.length - 2}</span>
                     )}
+                    <Link to={"/chat/"+{_id}}><button className="btn-primary">Chat</button></Link>
                   </div>
                 )}
               </div>
