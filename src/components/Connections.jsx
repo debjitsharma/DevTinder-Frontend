@@ -56,6 +56,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { addConnections } from "../utils/connectionSlice";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
@@ -140,7 +141,7 @@ const Connections = () => {
                     )}
                   </div>
                 )}
-             <Link to={"/chat/"+{_id}}><button className="btn-primary">Chat</button></Link>
+             <Link to={`/chat/${_id}`}><button className="btn-primary">Chat</button></Link>
               </div>
             </div>
           );
