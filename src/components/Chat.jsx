@@ -3,11 +3,12 @@ import { useParams, Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { createSocketConnection } from "../utils/socket";
 
 export const Chat = () => {
   const { targetUserId } = useParams();           // from URL: /chat/:targetUserId
   const loggedInUser = useSelector((store) => store.user);
-  
+  const loggedInUserId=loggedInUser?._id;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -20,6 +21,11 @@ export const Chat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(()=>{
+    const socket= createSocketConnection();
+    socket.emit("joinChat",{userId,targetUserId})
+  })
 
   // TODO: Later you can fetch real chat history here
   // useEffect(() => {
