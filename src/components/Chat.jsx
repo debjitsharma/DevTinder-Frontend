@@ -25,7 +25,8 @@ export const Chat = () => {
   useEffect(()=>{
     const socket= createSocketConnection();
     socket.emit("joinChat",{loggedInUserId,targetUserId})
-  },[])
+    return ()=> socket.disconnect();
+  },[loggedInUserId, targetUserId])
 
   // TODO: Later you can fetch real chat history here
   // useEffect(() => {
