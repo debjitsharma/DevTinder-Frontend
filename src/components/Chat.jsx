@@ -9,9 +9,11 @@ export const Chat = () => {
   const { targetUserId } = useParams();           // from URL: /chat/:targetUserId
   const loggedInUser = useSelector((store) => store.user);
   const loggedInUserId=loggedInUser?._id;
+  const firstName=loggedInUser?.firstName;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
+
 
   // Auto-scroll to bottom when new message arrives
   const scrollToBottom = () => {
@@ -24,7 +26,7 @@ export const Chat = () => {
 
   useEffect(()=>{
     const socket= createSocketConnection();
-    socket.emit("joinChat",{loggedInUserId,targetUserId})
+    socket.emit("joinChat",{firstName,loggedInUserId,targetUserId})
     return ()=> socket.disconnect();
   },[loggedInUserId, targetUserId])
 
@@ -35,28 +37,8 @@ export const Chat = () => {
   // }, [targetUserId]);
 
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
-
-    // Optimistic UI (shows instantly)
-    const optimisticMessage = {
-      _id: Date.now().toString(),
-      senderId: loggedInUser?._id,
-      text: newMessage,
-      createdAt: new Date().toISOString(),
-    };
-
-    setMessages((prev) => [...prev, optimisticMessage]);
-    setNewMessage("");
-
-    // TODO: Call your backend when you add the chat API
-    // try {
-    //   await axios.post(`${BASE_URL}/chat/send/${targetUserId}`, 
-    //     { text: newMessage }, 
-    //     { withCredentials: true }
-    //   );
-    // } catch (err) {
-    //   console.error("Failed to send message", err);
-    // }
+    const socket= createSocketConnection();
+    socket.emit("sendMessage",{firstName,loggedInUserId,targetUserId,text:newMessage,})
   };
 
   return (
