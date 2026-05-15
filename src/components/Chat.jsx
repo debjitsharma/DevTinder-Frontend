@@ -31,8 +31,11 @@ export const Chat = () => {
     const socket= createSocketConnection();
     socket.emit("joinChat",{firstName,loggedInUserId,targetUserId})
     
-    socket.on("messageReceived",({firstName,newMessage}));
-    return ()=> socket.current.disconnect();
+    socket.on("messageReceived",({firstName,loggedInUserId,targetUserId,newMessage})=>{
+      console.log(firstName+" : "+ newMessage);
+      setMessages([...messages,{firstName,loggedInUserId,targetUserId,newMessage}])
+    });
+    return ()=> socket.disconnect();
   },[loggedInUserId, targetUserId])
 
   // TODO: Later you can fetch real chat history here
@@ -69,7 +72,7 @@ export const Chat = () => {
             </div>
           </div>
           <div>
-            <h2 className="font-semibold text-lg">Alex Chen</h2>   {/* replace with dynamic name */}
+            <h2 className="font-semibold text-lg">{messages.firstName}</h2>   {/* replace with dynamic name */}
             <p className="text-[#39d353] text-sm flex items-center gap-1">
               <span className="w-2 h-2 bg-[#39d353] rounded-full animate-pulse"></span>
               Online
@@ -95,22 +98,21 @@ export const Chat = () => {
             <p className="text-[#8b949e]">Say hi to start the conversation!</p>
           </div>
         ) : (
-          messages.map((msg) => (
+          messages.map((msg,index) => (
             <div
-              key={msg._id}
-              className={`flex ${msg.senderId === loggedInUser?._id ? "justify-end" : "justify-start"}`}
+              key={index}
+              className={`flex ${msg.loggedInUserId === loggedInUserId ? "justify-end" : "justify-start"}`}
             >
               <div
                 className={`max-w-[70%] px-5 py-3 rounded-3xl ${
-                  msg.senderId === loggedInUser?._id
-                    ? "bg-[#39d353] text-[#0d1117] rounded-tr-none"
+                  msg.loggedInUserId === loggedInUserId? "bg-[#39d353] text-[#0d1117] rounded-tr-none"
                     : "bg-[#21262d] text-white rounded-tl-none"
                 }`}
               >
-                <p className="text-[15px] leading-relaxed">{msg.text}</p>
-                <p className="text-[10px] mt-1 opacity-70 text-right">
+                <p className="text-[15px] leading-relaxed">{msg.newMessage}</p>
+                {/* <p className="text-[10px] mt-1 opacity-70 text-right">
                   {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                </p>
+                </p> */}
               </div>
             </div>
           ))
