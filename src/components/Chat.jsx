@@ -23,11 +23,16 @@ export const Chat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
+  // const socketRef=useRef(null);
   useEffect(()=>{
+     if(!loggedInUserId){
+      return;
+    }
     const socket= createSocketConnection();
     socket.emit("joinChat",{firstName,loggedInUserId,targetUserId})
-    return ()=> socket.disconnect();
+    
+    socket.on("messageReceived",({firstName,newMessage}));
+    return ()=> socket.current.disconnect();
   },[loggedInUserId, targetUserId])
 
   // TODO: Later you can fetch real chat history here
@@ -35,10 +40,11 @@ export const Chat = () => {
   //   const fetchMessages = async () => { ... };
   //   fetchMessages();
   // }, [targetUserId]);
-
+ 
   const sendMessage = async () => {
-    const socket= createSocketConnection();
+     const socket= createSocketConnection();
     socket.emit("sendMessage",{firstName,loggedInUserId,targetUserId,text:newMessage,})
+    setNewMessage("");
   };
 
   return (
