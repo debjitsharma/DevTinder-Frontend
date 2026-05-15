@@ -33,7 +33,7 @@ export const Chat = () => {
     
     socket.on("messageReceived",({firstName,loggedInUserId,targetUserId,newMessage})=>{
       console.log(firstName+" : "+ newMessage);
-      setMessages([...messages,{firstName,loggedInUserId,targetUserId,newMessage}])
+      setMessages(prev=>[...prev,{firstName,loggedInUserId,targetUserId,newMessage}])
     });
     return ()=> socket.disconnect();
   },[loggedInUserId, targetUserId])
@@ -101,11 +101,11 @@ export const Chat = () => {
           messages.map((msg,index) => (
             <div
               key={index}
-              className={`flex ${msg.loggedInUserId === loggedInUserId ? "justify-end" : "justify-start"}`}
+              className={`flex ${msg.loggedInUserId.equals(loggedInUserId) ? "justify-end" : "justify-start"}`}
             >
               <div
                 className={`max-w-[70%] px-5 py-3 rounded-3xl ${
-                  msg.loggedInUserId === loggedInUserId? "bg-[#39d353] text-[#0d1117] rounded-tr-none"
+                  msg.loggedInUserId.equals(loggedInUserId)? "bg-[#39d353] text-[#0d1117] rounded-tr-none"
                     : "bg-[#21262d] text-white rounded-tl-none"
                 }`}
               >
